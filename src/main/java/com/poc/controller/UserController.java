@@ -3,6 +3,7 @@ package com.poc.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +14,9 @@ import com.poc.response.PocResponse;
 import com.poc.services.UserService;
 
 @RestController
+@CrossOrigin
 public class UserController {
-
+ 
 	@Autowired
 	UserService userService;
 	PocResponse response=null;
@@ -35,7 +37,19 @@ public class UserController {
 		}
 		return response;
 	}
-
+	@GetMapping("/userById/{user_id}")
+	public PocResponse userById(@PathVariable int user_id) {
+		response = new PocResponse();
+		User user = userService.userById(user_id);
+		if (user == null) {
+			response.getResult().put("error", "Something went wrong");
+			response.setSuccess(false);
+		} else {
+			response.getResult().put("success", user);
+			response.setSuccess(true);
+		}
+		return response;
+	}
 	@GetMapping("/usersOrderByDob")
 	public PocResponse usersOrderByDob() {
 		response = new PocResponse();
@@ -70,10 +84,10 @@ public class UserController {
 		return response;
 	}
 
-	@GetMapping("/userOrderByDojAndDoj")
-	public PocResponse userOrderByDojAndDoj() {
+	@GetMapping("/userOrderByDobAndDoj")
+	public PocResponse userOrderByDobAndDoj() {
 		response = new PocResponse();
-		List<User> users = userService.getUserOrderByDojAndDoj();
+		List<User> users = userService.getUserOrderByDobAndDoj();
 		if (users == null) {
 			response.getResult().put("error", "Something went wrong");
 			response.setSuccess(false);

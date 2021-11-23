@@ -1,6 +1,7 @@
 package com.poc.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class UserService {
 
 	}
 
-	public List<User> getUserOrderByDojAndDoj() {
+	public List<User> getUserOrderByDobAndDoj() {
 		try {
 			LOGGER.info("getting user order by date of birth and date of joining");
 			List<User> users = userRepository.findAllByOrderByDobAscDojAsc();
@@ -85,6 +86,19 @@ public class UserService {
 			return 0;
 		}
 		
+	}
+
+	public User userById(int user_id) {
+		try
+		{
+		Optional<User> result=	userRepository.findById(user_id);
+		User user=result.get();
+		LOGGER.info("returning user");
+		return user;
+		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return null;
+		}
 	}
 
 	

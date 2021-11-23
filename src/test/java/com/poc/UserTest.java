@@ -71,7 +71,7 @@ public class UserTest {
 						new User(2, "shivam", "s", "Sharma", "Shivam@gmail.com", "male", new Date(1996, 8, 20),
 								new Date(2021, 8, 20), "9876543212", "India", "Jharkhand", "Ranchi", "834001", false))
 				.collect(Collectors.toList()));
-		assertEquals(2, userService.getUserOrderByDojAndDoj().size());
+		assertEquals(2, userService.getUserOrderByDobAndDoj().size());
 	}
 
 	

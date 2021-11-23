@@ -1,7 +1,9 @@
 package com.poc.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -11,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,7 @@ import com.poc.response.PocResponse;
 import com.poc.services.RegistrationService;
 
 @RestController
+@CrossOrigin
 public class RegistrationController {
 	@Autowired
 	RegistrationService registrationService;
@@ -33,10 +37,10 @@ public class RegistrationController {
 		response = new PocResponse();
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
-			Set<String> errorMessages = new HashSet<String>();
+			Map<String,String> errorMessages = new HashMap<String,String>();
 			for (FieldError error : errors) {
 				LOGGER.error(error.getDefaultMessage());
-				errorMessages.add(error.getDefaultMessage());
+				errorMessages.put(error.getField(),error.getDefaultMessage());
 			}
 			response.getResult().put("error", errorMessages);
 			response.setSuccess(false);
@@ -57,7 +61,6 @@ public class RegistrationController {
 	@PutMapping("/userEdit")
 	public PocResponse userEdit(@Valid @RequestBody User user, BindingResult result) {
 		response=new PocResponse();
-		boolean isDone = registrationService.saveUserRegistration(user);
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
 			Set<String> errorMessages = new HashSet<String>();
@@ -69,6 +72,7 @@ public class RegistrationController {
 			response.setSuccess(false);
 			return response;
 		}
+		boolean isDone = registrationService.saveUserRegistration(user);
 		if (isDone == true) {
 			response.getResult().put("success", "Updated Successfully");
 			response.setSuccess(true);

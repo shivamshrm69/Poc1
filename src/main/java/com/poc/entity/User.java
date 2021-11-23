@@ -15,6 +15,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Type;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,10 +49,12 @@ public class User {
 	@NotBlank(message = "Please Select Gender")
 	private String gender;
 	@Past(message = "Select Valid Date of Birth")
+	@Type(type="date")
 	private Date dob;
 	
 	@Column(name = "joining_date")
 	@PastOrPresent(message = "Select Valid Date of Joining")
+	@Type(type="date")
 	private Date doj;
 	
 	@Pattern(regexp = "^[6-9]\\d{9}$", message = "Please Enter Valid Mobile Number")
